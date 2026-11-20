@@ -1,0 +1,53 @@
+# GoReleaser v2 — builds the static grow-secrets-exec binaries and checksums.txt
+# for a GitHub release (tag vX.Y.Z). Release assets:
+#   grow-secrets-exec_linux_amd64, grow-secrets-exec_linux_arm64, checksums.txt
+#
+# The build is reproducible (CGO off, -trimpath, -buildvcs=false, empty build id, fixed Go version
+# in .github/workflows/release.yml): `make checksums VERSION=X.Y.Z` with the same
+# Go version prints the same SHA-256 values. Consumers (the Grow platform init
+# container) pin the version AND the SHA-256 of the asset they download.
+version: 2
+
+project_name: grow-secrets-exec
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: grow-secrets-exec
+    main: ./cmd/grow-secrets-exec
+    binary: grow-secrets-exec
+    env:
+      - CGO_ENABLED=0
+    goos: [linux]
+    goarch: [amd64, arm64]
+    flags:
+      - -trimpath
+      - -buildvcs=false
+    ldflags:
+      - -s -w -buildid= -X main.version={{ .Version }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: binaries
+    formats: [binary]
+    name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  use: github
+  sort: asc
+
+release:
+  github:
+    owner: grow-codes-packages
+    name: secrets-exec
+  prerelease: auto
+  name_template: "v{{ .Version }}"

@@ -1,0 +1,16 @@
+grow-secrets-exec (grow-codes-packages/secrets-exec)
+Copyright 2026 Grow Codes <opensource@grow.codes>
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+Source: https://github.com/grow-codes-packages/secrets-exec
+
+This software is provided "AS IS", WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See sections 7 and 8 of the Apache License, Version 2.0.
+
+This project is not affiliated with, endorsed or sponsored by HashiCorp, Inc.
+(an IBM company) or the OpenBao project. HashiCorp Vault and OpenBao are
+trademarks of their owners and are named for identification only. No Vault or
+OpenBao source code is included; the binary talks to their public HTTP API
+through the Grow Codes SDK github.com/grow-codes-packages/hashicorp-vault/go
+(Apache-2.0, same authors). The only other dependency is the Go standard library
+(BSD-3-Clause).
